@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.shiro.stuZy.dao.UserMapper">
+    <resultMap type="com.shiro.stuZy.entity.User" id="User">
+    <result property="id" column="id"/>
+    <result property="userName" column="username"/>
+    <result property="password" column="password"/>
+    </resultMap>
+
+    <select id="getUserByUserName" resultMap="User">
+        select * from t_user where username=#{userName}
+    </select>
+   
+   <!-- 根据用户名获取角色 -->
+   <!-- #IN(1,2,3,4);IN('aa','bb','cc','44') in是以foreach实现的 -->
+   <select id="getRoles" parameterType="String" resultType="String">
+        select r.roleName from t_user u,t_role r where u.roleId = r.id and u.username=#{userName}
+   </select>
+   
+   <!-- 根据用户名获取权限名 -->
+   <select id="getPermission" parameterType="String" resultType="String">
+		select
+		  p.permissionname 
+		from
+		  t_user u
+		  , t_role r
+		  , t_permission p 
+		where
+		  u.roleId = r.id 
+		  and p.roleid=r.id
+		  and u.username = 'admin'
+   </select>
+</mapper>
